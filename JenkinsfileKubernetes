@@ -1,29 +1,47 @@
 node{
      
-    stage('SCM Checkout'){
-        git credentialsId: 'GIT_CREDENTIALS', url:  'https://github.com/acadalearning/Jenkins-Docker-K8s-Spring-boot-mongo.git',branch: 'master'
+    stage('Git Clone'){
+        git branch: 'main', credentialsId: 'GITHUB_CRED', url: 'https://github.com/bukolajayi/DPC_product.git'
     }
    
     stage(" Maven Clean Package"){
-      def mavenHome =  tool name: "Maven-3.8.5", type: "maven"
+      def mavenHome =  tool name: "maven3.8.4", type: "maven"
       def mavenCMD = "${mavenHome}/bin/mvn"
       sh "${mavenCMD} clean package"
       
     } 
     
-    
+    /**stage('Code Quality'){
+        //sh "docker rmi -f (docker images -qa)"
+        //sh "docker rm -f (docker ps -qa)"
+        sh "docker rm -f sonar"
+        sh "docker run --name sonar -d -p 9000:9000 sonarqube"
+        sh "docker ps"
+        def mavenHome =  tool name: "maven3.8.4", type: "maven"
+        def mavenCMD = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} sonar:sonar"
+    }
+    **/
+    stage('Manual Approval'){
+        sh "echo Approval for DPC"
+        timeout(time:5, unit:'DAYS'){
+            input message:'Approval for Production'
+        }
+    }
+  
     stage('Build Docker Image'){
-        sh 'docker build -t acadalearning/spring-boot-mongo .'
+        sh 'docker build -t bukolajayi/dpc-product .'
     }
     
     stage('Push Docker Image'){
-        withCredentials([string(credentialsId: 'DOKCER_HUB_PASSWORD', variable: 'DOKCER_HUB_PASSWORD')]) {
-          sh "docker login -u acadalearning -p ${DOKCER_HUB_PASSWORD}"
-        }
-        sh 'docker push acadalearning/spring-boot-mongo'
+        //withCredentials([string(credentialsId: 'DOCKER_HUB_CRED2', variable: 'DOCKER_HUB_CRED2')]) {
+          //sh "docker login -u bukolajayi -p ${DOKCER_HUB_CRED2}"
+        //}
+        //sh "docker login -u bukolajayi -p christA1!"
+        sh 'docker push bukolajayi/dpc-product'
      }
      
-     stage("Deploy To Kuberates Cluster"){
+    /** stage("Deploy To Kuberates Cluster"){
        kubernetesDeploy(
          configs: 'springBootMongo.yml', 
          kubeconfigId: 'KUBERNATES_CONFIG',
@@ -31,7 +49,7 @@ node{
         )
      }
 	 
-	  /**
+	  
       stage("Deploy To Kuberates Cluster"){
         sh 'kubectl apply -f springBootMongo.yml'
       } **/
