@@ -5,19 +5,17 @@ node{
     }
    
     stage(" Maven Clean Package"){
-      def mavenHome =  tool name: "maven3.8.4", type: "maven"
+      def mavenHome =  tool name: "maven3.8.5", type: "maven"
       def mavenCMD = "${mavenHome}/bin/mvn"
       sh "${mavenCMD} clean package"
       
     } 
     
     /**stage('Code Quality'){
-        //sh "docker rmi -f (docker images -qa)"
-        //sh "docker rm -f (docker ps -qa)"
         sh "docker rm -f sonar"
         sh "docker run --name sonar -d -p 9000:9000 sonarqube"
         sh "docker ps"
-        def mavenHome =  tool name: "maven3.8.4", type: "maven"
+        def mavenHome =  tool name: "maven3.8.5", type: "maven"
         def mavenCMD = "${mavenHome}/bin/mvn"
         sh "${mavenCMD} sonar:sonar"
     }
@@ -34,24 +32,18 @@ node{
     }
     
     stage('Push Docker Image'){
-        //withCredentials([string(credentialsId: 'DOCKER_HUB_CRED2', variable: 'DOCKER_HUB_CRED2')]) {
-          //sh "docker login -u bukolajayi -p ${DOKCER_HUB_CRED2}"
-        //}
-        //sh "docker login -u bukolajayi -p christA1!"
+        withCredentials([string(credentialsId: 'DOCKER_HUB_CRED2', variable: 'DOCKER_HUB_CRED2')]) {
+          sh "docker login -u bukolajayi -p ${DOCKER_HUB_CRED2}"
+        }
         sh 'docker push bukolajayi/dpc-product'
      }
      
-    /** stage("Deploy To Kuberates Cluster"){
-       kubernetesDeploy(
-         configs: 'springBootMongo.yml', 
-         kubeconfigId: 'KUBERNATES_CONFIG',
-         enableConfigSubstitution: true
-        )
+     stage("Deploy To Kuberates Cluster"){
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
+                sh '/var/lib/jenkins/bin/kubectl apply -f springBootMongo.yml'
+                sh '/var/lib/jenkins/bin/kubectl get all -A'
+                sh '/var/lib/jenkins/bin/kubectl get no'
+            }
+                
      }
-	 
-	  
-      stage("Deploy To Kuberates Cluster"){
-        sh 'kubectl apply -f springBootMongo.yml'
-      } **/
-     
-}
+     }
