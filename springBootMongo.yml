@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
       - name: springappcontainer
-        image: acadalearning/spring-boot-mongo
+        image: bukolajayi/dpc-product
         ports:
         - containerPort: 8080
         env:
