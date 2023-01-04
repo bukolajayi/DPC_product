@@ -38,7 +38,7 @@ node{
         sh 'docker push bukolajayi/dpc-product'
      }
      
-     stage("Deploy To Kuberates Cluster"){
+     stage("Deploy To Kubernetes Cluster"){
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
                 sh '/var/lib/jenkins/bin/kubectl apply -f springBootMongo.yml'
                 sh '/var/lib/jenkins/bin/kubectl get all -A'
