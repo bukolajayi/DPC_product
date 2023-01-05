@@ -1,9 +1,11 @@
 # DevOps/CICD Demonstration to DPC Product Team 
 
 ## Objectives
-To demonstrate a CI/CD pipeline process end-to-end.
-To demonstrate functionality of containers.
-To share security best practices
+To demonstrate a CI/CD pipeline process end-to-end;
+
+To demonstrate functionality of containers;
+
+To share security best practices.
 
 ## Technology Stack
 
