@@ -1,37 +1,19 @@
-# Build Project Using Maven
+# DevOps/CICD Demonstration to DPC Product Team 
 
-Maven is java based build tool to generate executable 
+## Objectives
+To demonstrate a CI/CD pipeline process end-to-end.
+To demonstrate functionality of containers.
+To share security best practices
 
-packages(jar, ear,war) for java based projects.
+## Technology Stack
 
-```bash
-mvn clean package
-```
-
-## Create Docker Image
-Docker is a continerization tool.Using docker we can deploy our applications as 
-
-containers using docker images. Containers contains application code and also the softwares,
-
-config files whatever is required for our application to run.
-
-Create docker image using Dockerfile
-
-
-```docker
-docker build -t acadalearning/spring-boot-mongo .
-```
-
-## Deploy Application Using Docker Compose 
-
-```docker-compose 
-docker-compose up -d 
-```
-
-## List Docker Containers
-```docker
-docker ps -a
-```
-
-## License
-[Acada Learning](http://acadalearning.com)
+Jira for capturing requirements/user stories
+Amazon AWS as cloud provider
+Ubuntu Linux as OS
+Jenkins as CI/CD tool
+GitHub as SCM tool
+Maven as build tool
+Sonarqube as automated test tool
+Docker as containerization tool
+Kubernetes as container orchestration tool.
+![image](https://user-images.githubusercontent.com/105896489/210676760-67ecca5f-8e1c-4853-a5e7-175463e179ac.png)
