@@ -11,7 +11,7 @@ node{
       
     } 
     
-    /**stage('Code Quality'){
+    stage('Code Quality'){
         sh "docker rm -f sonar"
         sh "docker run --name sonar -d -p 9000:9000 sonarqube"
         sh "docker ps"
@@ -19,7 +19,7 @@ node{
         def mavenCMD = "${mavenHome}/bin/mvn"
         sh "${mavenCMD} sonar:sonar"
     }
-    **/
+    
     stage('Manual Approval'){
         sh "echo Approval for DPC"
         timeout(time:5, unit:'DAYS'){
