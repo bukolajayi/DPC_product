@@ -25,5 +25,5 @@ Sonarqube as automated test tool;
 
 Docker as containerization tool;
 
-Kubernetes as container orchestration tool.
+Kubernetes as container orchestration tool
 
