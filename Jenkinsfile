@@ -13,7 +13,7 @@ node{
     
     stage('Code Quality'){
         sh "docker rm -f sonar"
-        sh "docker run --name sonar -d -p 9000:9000 sonarqube"
+        sh "docker run --name sonar -d -p 5000:9000 sonarqube"
         sh "docker ps"
         def mavenHome =  tool name: "maven3.8.5", type: "maven"
         def mavenCMD = "${mavenHome}/bin/mvn"
@@ -28,22 +28,23 @@ node{
     }
   
     stage('Build Docker Image'){
-        sh 'docker build -t bukolajayi/dpc-product .'
+        sh 'docker build -t bukolajayi/dpc-product:latest .'
     }
     
     stage('Push Docker Image'){
         withCredentials([string(credentialsId: 'DOCKER_HUB_CRED2', variable: 'DOCKER_HUB_CRED2')]) {
           sh "docker login -u bukolajayi -p ${DOCKER_HUB_CRED2}"
         }
-        sh 'docker push bukolajayi/dpc-product'
+        sh 'docker push bukolajayi/dpc-product:latest'
      }
      
      stage("Deploy To Kubernetes Cluster"){
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
-                sh '/var/lib/jenkins/bin/kubectl apply -f springBootMongo.yml'
-                sh '/var/lib/jenkins/bin/kubectl get all -A'
-                sh '/var/lib/jenkins/bin/kubectl get no'
+                sh '/home/ubuntu/bin/kubectl apply -f springBootMongo.yml'
+                sh '/home/ubuntu/bin/kubectl get all -A'
+                sh '/home/ubuntu/bin/kubectl get no'
             }
-                
-     }
+            }    
+     
+     
      }
